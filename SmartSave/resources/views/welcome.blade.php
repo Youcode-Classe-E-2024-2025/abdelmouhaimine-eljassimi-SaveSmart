@@ -29,7 +29,7 @@
         <div class="p-4 border-b border-gray-200">
             <div class="flex items-center gap-2">
                 <img src="assets/logo.png" alt="logo" class="w-10">
-                <span class="font-bold text-xl">Findeck</span>
+                <span class="font-bold text-xl">PFM</span>
             </div>
         </div>
 
@@ -101,7 +101,7 @@
         <div class="flex justify-between items-center mb-6">
             <h3>/Home</h3>
             <div class="flex items-center gap-4">
-            <img class="rounded-lg w-8 h-8" src="assets/logo.png" alt="home">
+                <img class="rounded-lg w-8 h-8" src="assets/logo.png" alt="home">
                 <button class=" bg-gray-100 px-4 py-2 rounded-sm border border-gray-300" >Share</button>
             </div>
         </div>
