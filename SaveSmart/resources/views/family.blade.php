@@ -60,10 +60,10 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             @foreach($families as $family)
-                <div class="flex flex-col items-center">
-                    <button class="group mb-2">
+                <div id="profile" class="flex flex-col items-center">
+                    <button class="group mb-2" onclick="showPasswordForm({{ $family['id'] }})">
                         <div class="profile-avatar w-32 h-32 rounded-md bg-primary flex items-center justify-center text-white text-5xl font-bold mb-2">
-                            J
+                            {{ substr($family['name'], 0, 1) }}
                         </div>
                         <p class="text-center text-gray-700 group-hover:text-primary transition-colors">{{$family['name']}}</p>
                     </button>
@@ -87,38 +87,38 @@
         </div>
     </div>
 </div>
-<div id="add-profile-form" class="min-h-screen container mx-auto px-4 py-16 hidden">
+
+<!-- Password Form View -->
+<div id="password-form" class="min-h-screen container mx-auto px-4 py-16 hidden">
     <!-- Header -->
     <div class="flex justify-center mb-12">
         <div class="flex items-center gap-2">
             <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
                 PFM
             </div>
-            <span class="font-bold text-xl">Profile Selection</span>
+            <span class="font-bold text-xl">Enter Password</span>
         </div>
     </div>
 
     <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
-        <h2 class="text-2xl font-semibold mb-6">Add Profile</h2>
+        <h2 class="text-2xl font-semibold mb-6 text-center">Enter Password</h2>
 
-        <form id="profile-form" action="/createprofile" method="POST" >
+        <form id="login-form" action="/validateprofile" method="POST">
             @csrf
-            <div class="mb-4">
-                <label for="profileName" class="block text-gray-700 mb-2">Name</label>
-                <input type="text" name="name" id="profileName" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter profile name" required/>
-            </div>
+            <input type="hidden" name="id" id="familyId"/>
 
             <div class="mb-6">
                 <label for="profilePassword" class="block text-gray-700 mb-2">Password</label>
-                <input type="password" name="password" required id="profilePassword" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter password"/>
+                <input type="password" name="password" id="profilePassword" required
+                       class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                       placeholder="Enter password"/>
             </div>
 
             <div class="flex gap-4">
                 <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-green-600 transition-colors">
-                    Save
+                    Login
                 </button>
-
-                <button type="button" onclick="hideAddForm()" class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                <button type="button" onclick="hidePasswordForm()" class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
                     Cancel
                 </button>
             </div>
@@ -127,9 +127,21 @@
 </div>
 
 <script>
+    function showPasswordForm(familyId) {
+        document.getElementById('profile-selection').classList.add('hidden');
+        document.getElementById('password-form').classList.remove('hidden');
 
+        // Set the family ID in the hidden input field
+        document.getElementById('familyId').value = familyId;
+    }
 
-    function showAddForm() {
+    function hidePasswordForm() {
+        document.getElementById('profile-selection').classList.remove('hidden');
+        document.getElementById('password-form').classList.add('hidden');
+    }
+
+    function showAddForm(familyId) {
+        document.getElementById('familyId').value = familyId;
         document.getElementById('profile-selection').classList.add('hidden');
         document.getElementById('add-profile-form').classList.remove('hidden');
     }

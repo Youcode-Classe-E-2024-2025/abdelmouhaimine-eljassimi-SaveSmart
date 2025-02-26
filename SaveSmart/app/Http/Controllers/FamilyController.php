@@ -33,6 +33,16 @@ class FamilyController extends Controller
         return redirect('/family')->with('success', 'Family created successfully and you have been added as a member.');
     }
 
+    public function validateprofile(Request $request)
+    {
+        $family = Family::where('id', $request->id)->first();
+        if ($family && Hash::check($request->password, $family->password)) {
+            return redirect('/');
+        }else{
+            return redirect('/family?error password invalide !');
+        }
+    }
+
 }
 
 

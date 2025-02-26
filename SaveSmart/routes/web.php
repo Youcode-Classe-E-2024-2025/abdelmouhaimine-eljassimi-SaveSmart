@@ -18,3 +18,6 @@ Route::get('/familyform', function () {return view('familyform');});
 Route::get('/family', [FamilyController::class, 'index']);
 Route::post('/createprofile', [FamilyController::class, 'create']);
 
+Route::post('/validateprofile', [FamilyController::class, 'validateprofile']);
+
+
