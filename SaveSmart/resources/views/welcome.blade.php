@@ -23,7 +23,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body class="bg-gray-50 font-['Roboto_Condensed',sans-serif]">
-<div class="flex min-h-screen">
+<div id="container" class="flex min-h-screen">
     <!-- Sidebar -->
     <aside class="w-64 bg-white border-r border-gray-200 fixed h-full">
         <!-- Logo -->
@@ -39,7 +39,7 @@
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
                 <div>
-                    <h3 class="font-medium">My Family</h3>
+                    <h3 class="font-medium">{{$family["name"]}}</h3>
                     <p class="text-sm text-gray-500">Free Plan • 2 Member</p>
                 </div>
             </div>
@@ -117,6 +117,7 @@
                     </svg>
                 </div>
                 <button class="px-4 py-2 bg-primary text-white rounded-lg"><i class='bx bxs-file-pdf text-xl'></i> Export</button>
+                <button id="addMoney" class="px-4 py-2 bg-primary text-white rounded-lg">Add Money</button>
             </div>
         </div>
 
@@ -125,7 +126,7 @@
             <!-- Total Revenue -->
             <div class="bg-white p-6 rounded-lg border border-gray-200">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-gray-500">Total Revenue</h3>
+                    <h3 class="text-gray-500">Total Savings</h3>
                     <button class="text-gray-400 hover:text-gray-600">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
@@ -139,10 +140,9 @@
                 </div>
             </div>
 
-            <!-- Total Expenses -->
             <div class="bg-white p-6 rounded-lg border border-gray-200">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-gray-500">Total Expenses</h3>
+                    <h3 class="text-gray-500">Savings Goal</h3>
                     <button class="text-gray-400 hover:text-gray-600">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
@@ -159,7 +159,7 @@
             <!-- Net Profit/Loss -->
             <div class="bg-white p-6 rounded-lg border border-gray-200">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-gray-500">Net Profit/Loss</h3>
+                    <h3 class="text-gray-500">Last Contribution</h3>
                     <button class="text-gray-400 hover:text-gray-600">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
@@ -168,8 +168,7 @@
                 </div>
                 <p class="text-2xl font-semibold mb-2">3.150.000 DH</p>
                 <div class="flex items-center text-sm">
-                    <span class="text-primary">↑ 3%</span>
-                    <span class="text-gray-500 ml-2">vs last month</span>
+                    <span class="text-gray-500 ml-2">by Sarah, 3 days ago</span>
                 </div>
             </div>
         </div>
@@ -265,9 +264,7 @@
                         <td>IDR 1.000.000</td>
                         <td>Due : Sep 15</td>
                         <td>
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-50 text-yellow-600">
-                                        Not Paid
-                                    </span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-50 text-yellow-600">Not Paid</span>
                         </td>
                         <td class="text-right">
                             <button class="text-gray-400 hover:text-gray-600">
@@ -283,5 +280,66 @@
         </div>
     </main>
 </div>
+
+
+<!-- Add Money to Family Savings Form (Hidden by default) -->
+<div id="add-money-form" class="min-h-screen container mx-auto px-4 py-16 hidden">
+    <!-- Header -->
+    <div class="flex justify-center mb-12">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
+                PFM
+            </div>
+            <span class="font-bold text-xl">Family Savings</span>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
+        <h2 class="text-2xl font-semibold mb-6">Add Money to Family Savings</h2>
+
+        <form id="add-money-form">
+
+            <div class="mb-4">
+                <label for="contributionAmount" class="block text-gray-700 mb-2">Amount (DH)</label>
+                <input type="number" id="contributionAmount" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter amount" required min="1"/>
+            </div>
+
+            <div class="mb-6">
+                <label for="contributionNote" class="block text-gray-700 mb-2">Note (optional)</label>
+                <textarea id="contributionNote" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="What is this money for?" rows="3"></textarea>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-green-600 transition-colors">
+                    Add to Savings
+                </button>
+
+                <button type="button" onclick="hideAddMoneyForm()" class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    let addMoney = document.getElementById('addMoney');
+    let addMoneyForm = document.getElementById('add-money-form');
+    let container = document.getElementById('container');
+
+    addMoney.addEventListener('click', () => {
+        addMoneyForm.classList.remove('hidden');
+        container.classList.add('hidden');
+    });
+
+    function hideAddMoneyForm() {
+        addMoneyForm.classList.add('hidden');
+        container.classList.remove('hidden');
+    }
+
+
+</script>
+
 </body>
 </html>

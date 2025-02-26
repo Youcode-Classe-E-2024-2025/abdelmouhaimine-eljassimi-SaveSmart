@@ -37,9 +37,9 @@ class FamilyController extends Controller
     {
         $family = Family::where('id', $request->id)->first();
         if ($family && Hash::check($request->password, $family->password)) {
-            return redirect('/');
+            return view('welcome', compact('family'));
         }else{
-            return redirect('/family?error password invalide !');
+            return redirect('/family?error password invalide !',);
         }
     }
 

@@ -27,4 +27,19 @@ class Family extends Model
     {
         return $this->belongsToMany(User::class)->withPivot('is_admin')->withTimestamps();
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function savingGoals()
+    {
+        return $this->hasMany(SavingGoal::class);
+    }
 }
