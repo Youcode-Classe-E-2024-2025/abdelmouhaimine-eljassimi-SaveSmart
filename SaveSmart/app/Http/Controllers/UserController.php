@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Family;
+use App\Models\SavingGoal;
 use App\Models\TotalBalance;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -16,7 +17,7 @@ class UserController extends Controller
 {
 
     public function dashboard(){
-        $totalBalance = TotalBalance::where('family_id', session('family')->id)->get();
+        $totalBalance = SavingGoal::where('family_id', session('family')->id)->where('name', 'Principale')->get();
         $categories = Category::all();
         return view('welcome', compact( 'totalBalance', 'categories'));
     }

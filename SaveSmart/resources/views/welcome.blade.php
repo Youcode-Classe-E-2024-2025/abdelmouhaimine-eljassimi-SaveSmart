@@ -106,6 +106,7 @@
                 <button class=" bg-gray-100 px-4 py-2 rounded-sm border border-gray-300" >Share</button>
             </div>
         </div>
+
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-semibold">Overview dashboard</h1>
@@ -118,6 +119,7 @@
                 </div>
                 <button class="px-4 py-2 bg-primary text-white rounded-lg"><i class='bx bxs-file-pdf text-xl'></i> Export</button>
                 <button id="addMoney" class="px-4 py-2 bg-primary text-white rounded-lg">Add Money</button>
+                <button id="SavingGoal" class="px-4 py-2 bg-primary text-white rounded-lg">Add Saving Goal</button>
             </div>
         </div>
 
@@ -133,7 +135,7 @@
                         </svg>
                     </button>
                 </div>
-                <p class="text-2xl font-semibold mb-2">{{$totalBalance[0]->balance}} DH</p>
+                <p class="text-2xl font-semibold mb-2">{{$totalBalance[0]->current_amount?? '0'}} DH</p>
                 <div class="flex items-center text-sm">
                     <span class="text-primary">↑ 7%</span>
                     <span class="text-gray-500 ml-2">vs last month</span>
@@ -149,7 +151,7 @@
                         </svg>
                     </button>
                 </div>
-                <p class="text-2xl font-semibold mb-2">9.300.000 DH</p>
+                <p class="text-2xl font-semibold mb-2">{{$totalBalance[0]->target_amount?? '0'}} DH</p>
                 <div class="flex items-center text-sm">
                     <span class="text-danger">↓ 4%</span>
                     <span class="text-gray-500 ml-2">vs last month</span>
@@ -317,6 +319,72 @@
     </div>
 </div>
 
+<div id="SavingGoal-form" class="min-h-screen container mx-auto px-4 py-16 hidden">
+    <!-- Header -->
+    <div class="flex justify-center mb-12">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
+                PFM
+            </div>
+            <span class="font-bold text-xl">Family Savings</span>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
+        <h2 class="text-2xl font-semibold mb-6">Add Saving Goal</h2>
+
+        <form action="/SavingGoal" method="POST" id="add-money-form">
+            @csrf
+            <input type="hidden" name="family_id" value="{{ session('family')->id }}">
+
+            <!-- Goal Name -->
+            <div class="mb-4">
+                <label for="goalName" class="block text-gray-700 mb-2">Goal Name</label>
+                <input type="text" name="name" id="goalName" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter goal name" required/>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 mb-2">Description</label>
+                <textarea name="description" id="description" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Describe your goal" rows="3"></textarea>
+            </div>
+
+            <!-- Target Amount -->
+            <div class="mb-4">
+                <label for="targetAmount" class="block text-gray-700 mb-2">Target Amount (DH)</label>
+                <input type="number" name="target_amount" id="targetAmount" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter target amount" required min="1"/>
+            </div>
+
+            <!-- Current Amount -->
+            <div class="mb-4">
+                <label for="currentAmount" class="block text-gray-700 mb-2">Current Amount (DH)</label>
+                <input type="number" name="current_amount" id="currentAmount" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter current amount" min="0"/>
+            </div>
+
+            <!-- Target Date -->
+            <div class="mb-4">
+                <label for="targetDate" class="block text-gray-700 mb-2">Target Date</label>
+                <input type="date" name="target_date" id="targetDate" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required/>
+            </div>
+
+            <!-- Is Completed -->
+            <div class="mb-4 flex items-center">
+                <input type="checkbox" name="is_completed" id="isCompleted" class="mr-2">
+                <label for="isCompleted" class="text-gray-700">Mark as Completed</label>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-green-600 transition-colors">
+                    Add to Savings
+                </button>
+
+                <button type="button" onclick="hideAddMoneyForm()" class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
 
     let addMoney = document.getElementById('addMoney');
@@ -331,8 +399,17 @@
     function hideAddMoneyForm() {
         addMoneyForm.classList.add('hidden');
         container.classList.remove('hidden');
+        SavingGoalForm.classList.add('hidden');
     }
 
+    let SavingGoal = document.getElementById('SavingGoal');
+    let SavingGoalForm = document.getElementById('SavingGoal-form');
+
+    SavingGoal.addEventListener('click', () => {
+        console.log('click');
+        SavingGoalForm.classList.remove('hidden');
+        container.classList.add('hidden');
+    });
 
 </script>
 

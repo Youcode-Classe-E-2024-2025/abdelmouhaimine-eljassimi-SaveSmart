@@ -7,59 +7,42 @@ use Illuminate\Http\Request;
 
 class SavingGoalController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function SavingGoal(Request $request)
     {
-        //
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'target_amount' => 'required|numeric|min:1',
+            'current_amount' => 'nullable|numeric|min:0',
+            'target_date' => 'required|date',
+            'is_completed' => 'nullable|boolean',
+            'family_id' => 'required|exists:families,id',
+        ]);
+
+        SavingGoal::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'target_amount' => $request->target_amount,
+            'current_amount' => $request->current_amount ?? 0,
+            'target_date' => $request->target_date,
+            'is_completed' => $request->is_completed ?? false,
+            'family_id' => $request->family_id,
+        ]);
+
+        return redirect('/')->with('success', 'Saving goal added successfully!');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function addMoney(Request $request)
     {
-        //
+        $Saving_Goal = SavingGoal::where('family_id', $request->id)->first();
+        if ($Saving_Goal) {
+            $Saving_Goal->update([
+                'current_amount' => $Saving_Goal->current_amount + $request->amount,
+            ]);
+        }
+        return redirect('/');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(SavingGoal $savingGoal)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(SavingGoal $savingGoal)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, SavingGoal $savingGoal)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(SavingGoal $savingGoal)
-    {
-        //
-    }
 }

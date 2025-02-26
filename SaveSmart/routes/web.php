@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\TotalBalanceController;
+use App\Http\Controllers\SavingGoalController;
 
 
 route::get('/',[UserController::class, 'dashboard']);
@@ -20,6 +21,7 @@ Route::post('/createprofile', [FamilyController::class, 'create']);
 
 Route::post('/validateprofile', [FamilyController::class, 'validateprofile']);
 
-Route::post('/addMoney', [TotalBalanceController::class, 'addMoney']);
+Route::post('/addMoney', [SavingGoalController::class, 'addMoney']);
+Route::post('/SavingGoal', [SavingGoalController::class, 'SavingGoal']);
 
 

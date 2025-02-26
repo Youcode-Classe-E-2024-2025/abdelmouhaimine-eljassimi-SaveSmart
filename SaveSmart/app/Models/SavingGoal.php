@@ -31,7 +31,6 @@ class SavingGoal extends Model
         return $this->belongsTo(Family::class);
     }
 
-    // Calcul du pourcentage de progression
     public function getProgressPercentageAttribute()
     {
         if ($this->target_amount <= 0) {

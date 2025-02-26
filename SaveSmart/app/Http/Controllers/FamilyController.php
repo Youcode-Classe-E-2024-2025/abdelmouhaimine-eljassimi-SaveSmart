@@ -39,7 +39,7 @@ class FamilyController extends Controller
         $family = Family::where('id', $request->id)->first();
         if ($family && Hash::check($request->password, $family->password)) {
             Session::put('family', $family);
-            return view('welcome', compact('family'));
+            return redirect('/');
         }else{
             return redirect('/family?error password invalide !',);
         }
