@@ -20,7 +20,8 @@
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@100..900&display=swap" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'></head>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
 <body class="bg-gray-50 font-['Roboto_Condensed',sans-serif]">
 <div class="flex min-h-screen">
     <!-- Sidebar -->

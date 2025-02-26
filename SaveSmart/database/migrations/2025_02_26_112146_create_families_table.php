@@ -9,10 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+// database/migrations/xxxx_xx_xx_create_families_table.php
+    public function up()
     {
         Schema::create('families', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('password'); // Mot de passe pour rejoindre la famille
             $table->timestamps();
         });
     }
