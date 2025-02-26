@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Family;
+use App\Models\TotalBalance;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +14,12 @@ use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
+
+    public function dashboard(){
+        $totalBalance = TotalBalance::where('family_id', session('family')->id)->get();
+        $categories = Category::all();
+        return view('welcome', compact( 'totalBalance', 'categories'));
+    }
 
     public function showRegistrationForm()
     {

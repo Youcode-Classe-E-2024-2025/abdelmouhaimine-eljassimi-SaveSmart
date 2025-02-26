@@ -42,4 +42,10 @@ class Family extends Model
     {
         return $this->hasMany(SavingGoal::class);
     }
+
+    public function totalBalance()
+    {
+        return $this->hasOne(TotalBalence::class);
+    }
+
 }

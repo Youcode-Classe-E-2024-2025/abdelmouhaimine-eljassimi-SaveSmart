@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Family;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class FamilyController extends Controller
 {
@@ -37,6 +38,7 @@ class FamilyController extends Controller
     {
         $family = Family::where('id', $request->id)->first();
         if ($family && Hash::check($request->password, $family->password)) {
+            Session::put('family', $family);
             return view('welcome', compact('family'));
         }else{
             return redirect('/family?error password invalide !',);
