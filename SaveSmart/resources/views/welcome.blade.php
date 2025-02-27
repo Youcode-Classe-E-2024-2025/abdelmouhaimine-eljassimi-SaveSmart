@@ -177,9 +177,9 @@
                         </svg>
                     </button>
                 </div>
-                <p class="text-2xl font-semibold mb-2">3.150.000 DH</p>
+                <p class="text-2xl font-semibold mb-2">{{$transaction->amount}}</p>
                 <div class="flex items-center text-sm">
-                    <span class="text-gray-500 ml-2">by Sarah, 3 days ago</span>
+                    <span class="text-gray-500 ml-2">by {{$transaction->user->name}}, {{$transaction->date}}</span>
                 </div>
             </div>
         </div>

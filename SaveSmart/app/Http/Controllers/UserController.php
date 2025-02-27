@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Family;
 use App\Models\SavingGoal;
 use App\Models\TotalBalance;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -17,9 +18,10 @@ class UserController extends Controller
 {
 
     public function dashboard(){
+        $transaction = Transaction::where('family_id', session('family')->id)->latest()->first();
         $totalBalance = SavingGoal::where('family_id', session('user')->id)->where('name', 'Principale')->get();
         $categories = Category::all();
-        return view('welcome', compact( 'totalBalance', 'categories'));
+        return view('welcome', compact( 'totalBalance', 'categories', 'transaction'));
     }
 
     public function showRegistrationForm()

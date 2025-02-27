@@ -29,7 +29,7 @@ class SavingGoalController extends Controller
             'current_amount' => $request->current_amount ?? 0,
             'target_date' => $request->target_date,
             'is_completed' => $request->is_completed ?? false,
-            'family_id' => $request->family_id,
+            'family_id' => session('user')->id
         ]);
 
         return redirect('/')->with('success', 'Saving goal added successfully!');
