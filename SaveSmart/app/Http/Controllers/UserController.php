@@ -61,6 +61,7 @@ class UserController extends Controller
 
         if ($user && Hash::check($request->password, $user->password)) {
             auth()->login($user);
+            session(['user' => $user]);
             return redirect('/family');
         }
         return redirect('/login?error=Email or password is incorrect');

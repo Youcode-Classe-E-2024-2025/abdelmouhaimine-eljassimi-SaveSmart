@@ -305,6 +305,7 @@
         </div>
     </div>
 
+
     <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
         <h2 class="text-2xl font-semibold mb-6">Add Transaction to Family Savings</h2>
 

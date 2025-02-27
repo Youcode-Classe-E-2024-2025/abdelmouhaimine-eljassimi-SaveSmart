@@ -39,15 +39,37 @@ class SavingGoalController extends Controller
     public function addMoney(Request $request)
     {
         $Saving_Goal = SavingGoal::where('family_id', $request->id)->first();
-        $category = Category::where('id', $request->category_id)->first();
-        if ($Saving_Goal) {
-            if($category->type == 'expense'){
-                $Saving_Goal->update(['current_amount' => $Saving_Goal->current_amount - $request->amount,]);
-            }else{
-            $Saving_Goal->update(['current_amount' => $Saving_Goal->current_amount + $request->amount,]);
+        $category = Category::find($request->category_id);
+
+        if ($Saving_Goal && $category) {
+            $amount = $request->amount;
+            $type = $category->type;
+
+            if ($type == 'expense') {
+                $Saving_Goal->update([
+                    'current_amount' => $Saving_Goal->current_amount - $amount,
+                ]);
+            } else {
+                $Saving_Goal->update([
+                    'current_amount' => $Saving_Goal->current_amount + $amount,
+                ]);
             }
+
+            Transaction::create([
+                "description" => $category->name,
+                "amount" => $amount,
+                "date" => date('Y-m-d'),
+                "type" => $type,
+                "category_id" => $category->id,
+                "user_id" => session('user')->id,
+                "family_id" => session('family')->id
+            ]);
+
+            return redirect('/');
         }
-        return redirect('/');
+
+        return redirect('/')->with('error', 'Saving Goal or Category not found');
     }
+
 
 }
