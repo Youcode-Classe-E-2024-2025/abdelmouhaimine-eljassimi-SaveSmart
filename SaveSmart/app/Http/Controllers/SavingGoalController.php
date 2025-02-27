@@ -38,7 +38,7 @@ class SavingGoalController extends Controller
 
     public function addMoney(Request $request)
     {
-        $Saving_Goal = SavingGoal::where('family_id', $request->id)->first();
+        $Saving_Goal = SavingGoal::where('family_id', session('user')->id)->first();
         $category = Category::find($request->category_id);
 
         if ($Saving_Goal && $category) {

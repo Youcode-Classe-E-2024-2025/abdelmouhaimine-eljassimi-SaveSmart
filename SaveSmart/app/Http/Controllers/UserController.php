@@ -17,7 +17,7 @@ class UserController extends Controller
 {
 
     public function dashboard(){
-        $totalBalance = SavingGoal::where('family_id', session('family')->id)->where('name', 'Principale')->get();
+        $totalBalance = SavingGoal::where('family_id', session('user')->id)->where('name', 'Principale')->get();
         $categories = Category::all();
         return view('welcome', compact( 'totalBalance', 'categories'));
     }

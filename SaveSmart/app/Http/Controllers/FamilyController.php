@@ -14,7 +14,10 @@ class FamilyController extends Controller
      */
     public function index()
     {
-        $families = Family::all();
+        $userId = session('user')->id;
+        $families = Family::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
         return view('family', compact('families'));
     }
 
@@ -41,7 +44,7 @@ class FamilyController extends Controller
             Session::put('family', $family);
             return redirect('/');
         }else{
-            return redirect('/family?error password invalide !',);
+            return redirect('/family?error password invalide !');
         }
     }
 
