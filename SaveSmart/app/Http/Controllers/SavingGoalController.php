@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\SavingGoal;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class SavingGoalController extends Controller
 {
@@ -37,10 +39,13 @@ class SavingGoalController extends Controller
     public function addMoney(Request $request)
     {
         $Saving_Goal = SavingGoal::where('family_id', $request->id)->first();
+        $category = Category::where('id', $request->category_id)->first();
         if ($Saving_Goal) {
-            $Saving_Goal->update([
-                'current_amount' => $Saving_Goal->current_amount + $request->amount,
-            ]);
+            if($category->type == 'expense'){
+                $Saving_Goal->update(['current_amount' => $Saving_Goal->current_amount - $request->amount,]);
+            }else{
+            $Saving_Goal->update(['current_amount' => $Saving_Goal->current_amount + $request->amount,]);
+            }
         }
         return redirect('/');
     }

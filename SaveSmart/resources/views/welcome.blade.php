@@ -118,7 +118,7 @@
                     </svg>
                 </div>
                 <button class="px-4 py-2 bg-primary text-white rounded-lg"><i class='bx bxs-file-pdf text-xl'></i> Export</button>
-                <button id="addMoney" class="px-4 py-2 bg-primary text-white rounded-lg">Add Money</button>
+                <button id="addMoney" class="px-4 py-2 bg-primary text-white rounded-lg">add a Transaction</button>
                 <button id="SavingGoal" class="px-4 py-2 bg-primary text-white rounded-lg">Add Saving Goal</button>
             </div>
         </div>
@@ -153,8 +153,17 @@
                 </div>
                 <p class="text-2xl font-semibold mb-2">{{$totalBalance[0]->target_amount?? '0'}} DH</p>
                 <div class="flex items-center text-sm">
-                    <span class="text-danger">↓ 4%</span>
-                    <span class="text-gray-500 ml-2">vs last month</span>
+                    <p class="text-lg font-semibold text-gray-700">
+                    @php
+                        $currentAmount = $totalBalance[0]->current_amount ?? 0;
+                        $targetAmount = $totalBalance[0]->target_amount ?? 1;
+                        $percentage = min(($currentAmount / max($targetAmount, 1)) * 100, 100);
+                    @endphp
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="h-full bg-primary rounded-full" style="width: {{ $percentage }}%;"></div>
+                    </div>
+                    </p>
+
                 </div>
             </div>
 
@@ -297,7 +306,7 @@
     </div>
 
     <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
-        <h2 class="text-2xl font-semibold mb-6">Add Money to Family Savings</h2>
+        <h2 class="text-2xl font-semibold mb-6">Add Transaction to Family Savings</h2>
 
         <form action="/addMoney" method="POST" id="add-money-form">
             @csrf
@@ -306,6 +315,11 @@
                 <label for="contributionAmount" class="block text-gray-700 mb-2">Amount (DH)</label>
                 <input type="number" name="amount" id="contributionAmount" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter amount" required min="1"/>
             </div>
+            <select class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary mb-4" name="category_id" id="category_id">
+                @foreach($categories as $catgory)
+                    <option value="{{$catgory->id}}">{{$catgory->name}}</option>
+                @endforeach
+            </select>
             <div class="flex gap-4">
                 <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-green-600 transition-colors">
                     Add to Savings
