@@ -13,17 +13,20 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
 
     public function dashboard(){
         $transaction = Transaction::where('family_id', session('family')->id)->latest()->first();
-        $transactions = Transaction::with(['family', 'user'])->where('user_id', session('user')->id)->paginate(5);
-        $totalBalance = SavingGoal::where('family_id', session('user')->id)->where('name', 'Principale')->get();
+        $transactions = Transaction::with(['family', 'user', 'category'])->where('user_id', session('user')->id)->paginate(5);
+        $totalBalance = SavingGoal::where('family_id', session('user')->id)->latest()->get();
         $categories = Category::where('family_id', session('user')->id)->get();
-        $numberProfiles = Family::where('id',session('user')->id)->count();
-        return view('welcome', compact( 'totalBalance', 'categories', 'transaction', 'transactions', 'numberProfiles'));
+        if($transactions === null){
+            return view('welcome', compact( 'totalBalance', 'categories', 'transaction'));
+        }
+        return view('welcome', compact( 'totalBalance', 'categories', 'transaction', 'transactions'));
     }
 
     public function showRegistrationForm()

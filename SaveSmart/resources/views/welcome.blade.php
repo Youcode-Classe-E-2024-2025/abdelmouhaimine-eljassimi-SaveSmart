@@ -41,7 +41,6 @@
                 <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
                 <div>
                     <h3 class="font-medium">{{ session('family')->name }}</h3>
-                    <p class="text-sm text-gray-500">Free Plan • {{$numberProfiles}} Member</p>
                 </div>
             </div>
         </div>
@@ -80,7 +79,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
-                            Financial Statements
+                            Personal Objectifs
                         </a>
                     </li>
                 </ul>
@@ -137,7 +136,7 @@
                         </svg>
                     </button>
                 </div>
-                <p class="text-2xl font-semibold mb-2">{{$totalBalance[0]->current_amount?? '0'}} DH</p>
+                <p class="text-2xl font-semibold mb-2">{{$totalBalance[0]->current_amount ?? '0'}} DH</p>
                 <div class="flex items-center text-sm">
                     <span class="text-primary">↑ 7%</span>
                     <span class="text-gray-500 ml-2">vs last month</span>
@@ -178,10 +177,12 @@
                         </svg>
                     </button>
                 </div>
+                @if($transaction)
                 <p class="text-2xl font-semibold mb-2">{{$transaction->amount}}</p>
                 <div class="flex items-center text-sm">
                     <span class="text-gray-500 ml-2">by {{$transaction->user->name}}, {{$transaction->date}}</span>
                 </div>
+                @endif
             </div>
         </div>
 
@@ -203,78 +204,87 @@
 
 
         <!-- NEW SECTION: Transaction History -->
-        <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-gray-700 font-medium text-lg">Transaction History</h3>
-                <div class="flex gap-2">
-                    <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">All</button>
-                    <button class="text-xs bg-primary text-white px-2 py-1 rounded-md">Income</button>
-                    <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">Expense</button>
+            <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-gray-700 font-medium text-lg">Transaction History</h3>
+                    <div class="flex gap-2">
+                        <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">All</button>
+                        <button class="text-xs bg-primary text-white px-2 py-1 rounded-md">Income</button>
+                        <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">Expense</button>
+                    </div>
                 </div>
-            </div>
-            <!-- Transaction List -->
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse">
-                    <thead>
-                    <tr class="border-b border-gray-200">
-                        <th class="text-left py-3 px-4 font-medium text-gray-600">Date</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-600">Category</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-600">Description</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-600">Member</th>
-                        <th class="text-right py-3 px-4 font-medium text-gray-600">Amount</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Static transactions that you can replace with your dynamic data -->
-                    @foreach($transactions as $transaction)
-                    <tr class="border-b border-gray-200 hover:bg-gray-50">
-                        <td class="py-3 px-4 text-gray-700">{{$transaction->created_at}}</td>
-                        <td class="py-3 px-4">
-                            <span class="px-2 py-1 bg-[{{$transaction->category->color}}] text-white rounded-full text-xs">{{$transaction->category->name}}</span>
-                        </td>
-                        <td class="py-3 px-4 text-gray-700">{{$transaction->category->type}}</td>
-                        <td class="py-3 px-4 text-gray-700">{{$transaction->family->name}}</td>
-                        @if($transaction->category->type == 'income')
-                        <td class="py-3 px-4 text-right text-green-600 font-medium">{{$transaction->amount}} DH</td>
-                        @else
-                            <td class="py-3 px-4 text-right text-red-600 font-medium">-{{$transaction->amount}} DH</td>
-                        @endif
-                    </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="flex justify-between items-center mt-6">
-                <!-- Displaying the number of records being shown -->
-                <p class="text-sm text-gray-500">
-                    Showing {{ $transactions->firstItem() }} to {{ $transactions->lastItem() }} of {{ $transactions->total() }} transactions
-                </p>
-                <div class="flex gap-2">
-                    <!-- Previous Button -->
-                    @if ($transactions->onFirstPage())
-                        <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50" disabled>Previous</button>
+                <!-- Transaction List -->
+                <div class="overflow-x-auto">
+                    @isset($transactions)  <!-- Check if 'transactions' exists -->
+                    @if($transactions->isEmpty())
+                        <p>No transactions available.</p>
                     @else
-                        <a href="{{ $transactions->previousPageUrl() }}" class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Previous</a>
+                        <table class="w-full border-collapse">
+                            <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-left py-3 px-4 font-medium text-gray-600">Date</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-600">Category</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-600">Description</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-600">Member</th>
+                                <th class="text-right py-3 px-4 font-medium text-gray-600">Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($transactions as $transaction)
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-gray-700">{{$transaction->created_at}}</td>
+                                    <td class="py-3 px-4">
+                                        @if($transaction->category)
+                                            <span class="px-2 py-1 bg-[{{$transaction->category->color ?? '#FFF'}}] text-white rounded-full text-xs">{{$transaction->category->name ?? 'N/A'}}</span>
+                                        @else
+                                            <span class="text-gray-500">N/A</span>
+                                        @endif
+                                    </td>
+                                    <td class="py-3 px-4 text-gray-700">{{$transaction->category->type ?? 'N/A'}}</td>
+                                    <td class="py-3 px-4 text-gray-700">{{$transaction->family->name ?? 'N/A'}}</td>
+                                    @if($transaction->category && $transaction->category->type == 'income')
+                                        <td class="py-3 px-4 text-right text-green-600 font-medium">{{$transaction->amount}} DH</td>
+                                    @else
+                                        <td class="py-3 px-4 text-right text-red-600 font-medium">-{{$transaction->amount}} DH</td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     @endif
-
-                    <!-- Pagination Numbers -->
-                    @foreach ($transactions->getUrlRange(1, $transactions->lastPage()) as $page => $url)
-                        <a href="{{ $url }}" class="px-3 py-1 border {{ $page == $transactions->currentPage() ? 'bg-primary text-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50' }} rounded-md">
-                            {{ $page }}
-                        </a>
-                    @endforeach
-
-                    <!-- Next Button -->
-                    @if ($transactions->hasMorePages())
-                        <a href="{{ $transactions->nextPageUrl() }}" class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Next</a>
                     @else
-                        <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50" disabled>Next</button>
-                    @endif
+                        <p>No transactions available.</p>
+                    @endisset
                 </div>
-            </div>
 
+                <!-- Pagination -->
+                @isset($transactions)
+                    <div class="flex justify-between items-center mt-6">
+                        <p class="text-sm text-gray-500">
+                            Showing {{ $transactions->firstItem() }} to {{ $transactions->lastItem() }} of {{ $transactions->total() }} transactions
+                        </p>
+                        <div class="flex gap-2">
+                            @if ($transactions->onFirstPage())
+                                <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50" disabled>Previous</button>
+                            @else
+                                <a href="{{ $transactions->previousPageUrl() }}" class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Previous</a>
+                            @endif
+
+                            @foreach ($transactions->getUrlRange(1, $transactions->lastPage()) as $page => $url)
+                                <a href="{{ $url }}" class="px-3 py-1 border {{ $page == $transactions->currentPage() ? 'bg-primary text-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50' }} rounded-md">
+                                    {{ $page }}
+                                </a>
+                            @endforeach
+
+                            @if ($transactions->hasMorePages())
+                                <a href="{{ $transactions->nextPageUrl() }}" class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Next</a>
+                            @else
+                                <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50" disabled>Next</button>
+                            @endif
+                        </div>
+                    </div>
+                @endisset
+            </div>
         </div>
     </main>
 </div>
@@ -476,10 +486,8 @@
         CategoryForm.classList.add('hidden');
         container.classList.remove('hidden');
     }
-
-
-    var targetAmount = <?php echo json_encode($totalBalance[0]->target_amount); ?>;
-    var currentAmount = <?php echo json_encode($totalBalance[0]->current_amount); ?>;
+        var targetAmount = <?php echo json_encode(isset($totalBalance[0]) ? $totalBalance[0]->target_amount : 0); ?>;
+        var currentAmount = <?php echo json_encode(isset($totalBalance[0]) ? $totalBalance[0]->current_amount : 0); ?>;
 
     var ctx = document.getElementById('savingsProgressChart').getContext('2d');
     var savingsProgressChart = new Chart(ctx, {

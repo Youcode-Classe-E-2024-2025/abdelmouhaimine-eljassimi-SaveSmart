@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\SavingGoal;
 use Illuminate\Http\Request;
 use App\Models\Family;
 use Illuminate\Support\Facades\Hash;
