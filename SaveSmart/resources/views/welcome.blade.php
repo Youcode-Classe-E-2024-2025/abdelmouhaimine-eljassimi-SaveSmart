@@ -247,15 +247,34 @@
 
             <!-- Pagination -->
             <div class="flex justify-between items-center mt-6">
-                <p class="text-sm text-gray-500">Showing 5 of 24 transactions</p>
+                <!-- Displaying the number of records being shown -->
+                <p class="text-sm text-gray-500">
+                    Showing {{ $transactions->firstItem() }} to {{ $transactions->lastItem() }} of {{ $transactions->total() }} transactions
+                </p>
                 <div class="flex gap-2">
-                    <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Previous</button>
-                    <button class="px-3 py-1 bg-primary text-white rounded-md">1</button>
-                    <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">2</button>
-                    <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">3</button>
-                    <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Next</button>
+                    <!-- Previous Button -->
+                    @if ($transactions->onFirstPage())
+                        <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50" disabled>Previous</button>
+                    @else
+                        <a href="{{ $transactions->previousPageUrl() }}" class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Previous</a>
+                    @endif
+
+                    <!-- Pagination Numbers -->
+                    @foreach ($transactions->getUrlRange(1, $transactions->lastPage()) as $page => $url)
+                        <a href="{{ $url }}" class="px-3 py-1 border {{ $page == $transactions->currentPage() ? 'bg-primary text-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50' }} rounded-md">
+                            {{ $page }}
+                        </a>
+                    @endforeach
+
+                    <!-- Next Button -->
+                    @if ($transactions->hasMorePages())
+                        <a href="{{ $transactions->nextPageUrl() }}" class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Next</a>
+                    @else
+                        <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50" disabled>Next</button>
+                    @endif
                 </div>
             </div>
+
         </div>
     </main>
 </div>
