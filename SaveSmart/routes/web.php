@@ -34,5 +34,9 @@ Route::middleware(FamilyAuth::class)->group(function () {
     Route::post('/SavingGoal', [SavingGoalController::class, 'SavingGoal']);
 });
 
+Route::get('/goal', function () {
+    return view('Goals');
+});
+
 
 
