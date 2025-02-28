@@ -21,6 +21,7 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@100..900&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body class="bg-gray-50 font-['Roboto_Condensed',sans-serif]">
 <div id="container" class="flex min-h-screen">
@@ -103,7 +104,7 @@
             <h3>/Home</h3>
             <div class="flex items-center gap-4">
                 <img class="rounded-lg w-8 h-8" src="assets/logo.png" alt="home">
-                <button class=" bg-gray-100 px-4 py-2 rounded-sm border border-gray-300" >Share</button>
+                <button class="bg-gray-100 px-4 py-2 rounded-sm border border-gray-300">Share</button>
             </div>
         </div>
 
@@ -164,7 +165,6 @@
                         <div class="h-full bg-primary rounded-full" style="width: {{ $percentage }}%;"></div>
                     </div>
                     </p>
-
                 </div>
             </div>
 
@@ -181,6 +181,94 @@
                 <p class="text-2xl font-semibold mb-2">{{$transaction->amount}}</p>
                 <div class="flex items-center text-sm">
                     <span class="text-gray-500 ml-2">by {{$transaction->user->name}}, {{$transaction->date}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW SECTION: Savings Charts -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Chart: Savings Goal vs Current Savings -->
+            <div class="bg-white p-6 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-700 font-medium">Savings Progress</h3>
+                    <div class="flex gap-2">
+                        <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">Monthly</button>
+                        <button class="text-xs bg-primary text-white px-2 py-1 rounded-md">Yearly</button>
+                    </div>
+                </div>
+                <div class="h-64">
+                    <canvas id="savingsProgressChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart: Monthly Contributions -->
+            <div class="bg-white p-6 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-700 font-medium">Monthly Contributions</h3>
+                    <div class="flex gap-2">
+                        <button class="text-xs bg-primary text-white px-2 py-1 rounded-md">Last 6 Months</button>
+                        <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">Last Year</button>
+                    </div>
+                </div>
+                <div class="h-64">
+                    <canvas id="monthlyContributionsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW SECTION: Transaction History -->
+        <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-gray-700 font-medium text-lg">Transaction History</h3>
+                <div class="flex gap-2">
+                    <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">All</button>
+                    <button class="text-xs bg-primary text-white px-2 py-1 rounded-md">Income</button>
+                    <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">Expense</button>
+                </div>
+            </div>
+
+            <!-- Transaction List -->
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                    <tr class="border-b border-gray-200">
+                        <th class="text-left py-3 px-4 font-medium text-gray-600">Date</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-600">Category</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-600">Description</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-600">Member</th>
+                        <th class="text-right py-3 px-4 font-medium text-gray-600">Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Static transactions that you can replace with your dynamic data -->
+                    @foreach($transactions as $transaction)
+                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                        <td class="py-3 px-4 text-gray-700">{{$transaction->created_at}}</td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-1 bg-[{{$transaction->category->color}}] text-white rounded-full text-xs">{{$transaction->category->name}}</span>
+                        </td>
+                        <td class="py-3 px-4 text-gray-700">Monthly Salary</td>
+                        <td class="py-3 px-4 text-gray-700">{{$transaction->user->name}}</td>
+                        @if($transaction->category->type == 'income')
+                        <td class="py-3 px-4 text-right text-green-600 font-medium">{{$transaction->amount}}</td>
+                        @else
+                            <td class="py-3 px-4 text-right text-red-600 font-medium">-{{$transaction->amount}}</td>
+                        @endif
+                    </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-between items-center mt-6">
+                <p class="text-sm text-gray-500">Showing 5 of 24 transactions</p>
+                <div class="flex gap-2">
+                    <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Previous</button>
+                    <button class="px-3 py-1 bg-primary text-white rounded-md">1</button>
+                    <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">2</button>
+                    <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">3</button>
+                    <button class="px-3 py-1 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50">Next</button>
                 </div>
             </div>
         </div>
@@ -306,7 +394,6 @@
             <span class="font-bold text-xl">Family Savings</span>
         </div>
     </div>
-
     <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
         <h2 class="text-2xl font-semibold mb-6">Add New Category</h2>
 
