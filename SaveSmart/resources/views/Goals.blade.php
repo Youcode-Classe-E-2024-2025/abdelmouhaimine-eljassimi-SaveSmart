@@ -231,11 +231,11 @@
                         </div>
                     </div>
                     <div class="flex justify-end gap-2 mt-4">
-                        <button class="p-2 text-gray-500 hover:text-primary rounded-full">
+                        <a href="#" id="editGoal" class="editGoal p-2 text-gray-500 hover:text-primary rounded-full" data-id="{{ $goal->id }}" data-name="{{ $goal->name }}" data-description="{{ $goal->description }}" data-target="{{ $goal->target_amount }}" data-current="{{ $goal->current_amount }}" data-date="{{ $goal->target_date }}" data-completed="{{ $goal->is_completed }}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                             </svg>
-                        </button>
+                        </a>
                         <a href="{{ route('goal.delete', $goal->id) }}" class="p-2 text-gray-500 hover:text-danger rounded-full">                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
@@ -314,10 +314,66 @@
         </form>
     </div>
 </div>
+<div id="SavingGoal-edit" class="min-h-screen container mx-auto px-4 py-16 hidden">
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
+        <h2 class="text-2xl font-semibold mb-6">Edit Saving Goal</h2>
+
+        <form action="/EditSavingGoal" method="POST" id="add-money-form">
+            @csrf
+            <input type="hidden" id="goal_id" name="goal_id" value="">
+            <!-- Goal Name -->
+            <div class="mb-4">
+                <label for="goalName" class="block text-gray-700 mb-2">Goal Name</label>
+                <input type="text" name="name" id="goalNameEdit" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter goal name" required/>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 mb-2">Description</label>
+                <textarea name="description" id="descriptionEdit" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Describe your goal" rows="3"></textarea>
+            </div>
+
+            <!-- Target Amount -->
+            <div class="mb-4">
+                <label for="targetAmount" class="block text-gray-700 mb-2">Target Amount (DH)</label>
+                <input type="number" name="target_amount" id="targetAmountEdit" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter target amount" required min="1"/>
+            </div>
+
+            <!-- Current Amount -->
+            <div class="mb-4">
+                <label for="currentAmount" class="block text-gray-700 mb-2">Current Amount (DH)</label>
+                <input type="number" name="current_amount" id="currentAmountEdit" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter current amount" min="0"/>
+            </div>
+
+            <!-- Target Date -->
+            <div class="mb-4">
+                <label for="targetDate" class="block text-gray-700 mb-2">Target Date</label>
+                <input type="date" name="target_date" id="targetDateEdit" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required/>
+            </div>
+
+            <!-- Is Completed -->
+            <div class="mb-4 flex items-center">
+                <input type="checkbox" name="is_completed" id="isCompletedEdit" class="mr-2">
+                <label for="isCompleted" class="text-gray-700">Mark as Completed</label>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-green-600 transition-colors">
+                    Edit Saving Goal
+                </button>
+
+                <button type="button" onclick="hideAddMoneyForm()" class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
 
     let SavingGoal = document.getElementById('SavingGoal');
     let SavingGoalForm = document.getElementById('SavingGoal-form');
+    let SavingGoalEdit = document.getElementById('SavingGoal-edit');
 
     SavingGoal.addEventListener('click', () => {
         console.log('click');
@@ -325,10 +381,42 @@
         container.classList.add('hidden');
     });
 
+
     function hideAddMoneyForm() {
         container.classList.remove('hidden');
+        SavingGoalEdit.classList.add('hidden');
         SavingGoalForm.classList.add('hidden');
     }
+
+    document.querySelectorAll('.editGoal').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const goalId = this.dataset.id;
+            const goalName = this.dataset.name;
+            const goalDesc = this.dataset.description;
+            const targetAmount = this.dataset.target;
+            const currentAmount = this.dataset.current;
+            const targetDate = this.dataset.date;
+            const isCompleted = this.dataset.completed;
+
+            console.log(goalName); // ✅ Just to check if data is working
+
+            // Show the form before filling the data
+            document.getElementById('SavingGoal-edit').classList.remove('hidden');
+            container.classList.add('hidden');
+
+            // Fill the form
+            document.getElementById('goal_id').value = goalId;
+            document.getElementById('goalNameEdit').value = goalName;
+            document.getElementById('descriptionEdit').value = goalDesc;
+            document.getElementById('targetAmountEdit').value = targetAmount;
+            document.getElementById('currentAmountEdit').value = currentAmount;
+            document.getElementById('targetDateEdit').value = targetDate;
+            document.getElementById('isCompletedEdit').checked = isCompleted == 1 ? true : false;
+        });
+    });
+
+
+
 </script>
 </body>
 </html>

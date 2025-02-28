@@ -66,6 +66,34 @@ class SavingGoalController extends Controller
 
         return redirect('/goal')->with('success', 'Saving goal added successfully!');
     }
+
+    public function EditSavingGoal(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'target_amount' => 'required|numeric|min:1',
+            'current_amount' => 'nullable|numeric|min:0',
+            'target_date' => 'required|date',
+            'is_completed' => 'nullable|boolean',
+            'goal_id' => 'required|exists:saving_goals,id',
+        ]);
+
+        $goal = SavingGoal::find($request->goal_id);
+
+        if ($goal) {
+            $goal->name = $request->name;
+            $goal->description = $request->description;
+            $goal->target_amount = $request->target_amount;
+            $goal->current_amount = $request->current_amount;
+            $goal->target_date = $request->target_date;
+            $goal->is_completed = $request->is_completed ? 1 : 0;
+            $goal->save();
+            return redirect('/goal')->with('success', 'Goal Updated Successfully!');
+        }
+        return redirect('/goal')->with('error', 'Goal Not Found!');
+    }
+
     public function addMoney(Request $request)
     {
         $Saving_Goal = SavingGoal::where('family_id', session('user')->id)->first();
