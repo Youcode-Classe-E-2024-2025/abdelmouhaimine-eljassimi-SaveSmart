@@ -120,6 +120,7 @@
                 <button class="px-4 py-2 bg-primary text-white rounded-lg"><i class='bx bxs-file-pdf text-xl'></i> Export</button>
                 <button id="addMoney" class="px-4 py-2 bg-primary text-white rounded-lg">add a Transaction</button>
                 <button id="SavingGoal" class="px-4 py-2 bg-primary text-white rounded-lg">Add Saving Goal</button>
+                <button id="addCategory" class="px-4 py-2 bg-primary text-white rounded-lg">Add Category</button>
             </div>
         </div>
 
@@ -294,6 +295,59 @@
         </form>
     </div>
 </div>
+
+<div id="add-category-form" class="min-h-screen container mx-auto px-4 py-16 hidden">
+    <!-- Header -->
+    <div class="flex justify-center mb-12">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
+                PFM
+            </div>
+            <span class="font-bold text-xl">Family Savings</span>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
+        <h2 class="text-2xl font-semibold mb-6">Add New Category</h2>
+
+        <form action="{{route('categories.store')}}" method="POST" id="add-category-form">
+            @csrf
+            <input type="hidden" name="family_id" value="{{ session('user')->id }}">
+            <!-- Category Name -->
+            <div class="mb-4">
+                <label for="categoryName" class="block text-gray-700 mb-2">Category Name</label>
+                <input type="text" name="name" id="categoryName" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter category name" required />
+            </div>
+
+            <!-- Category Type (Income or Expense) -->
+            <div class="mb-4">
+                <label for="categoryType" class="block text-gray-700 mb-2">Category Type</label>
+                <select name="type" id="categoryType" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+
+            <!-- Random Color Picker -->
+            <div class="mb-4">
+                <label for="categoryColor" class="block text-gray-700 mb-2">Category Color</label>
+                <input type="color" name="color" id="categoryColor" class="w-full border border-gray-200 rounded-lg" />
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-green-600 transition-colors">
+                    Add Category
+                </button>
+
+                <button type="button" onclick="hideAddCategoryForm()" class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <script>
 
     let addMoney = document.getElementById('addMoney');
@@ -319,6 +373,18 @@
         SavingGoalForm.classList.remove('hidden');
         container.classList.add('hidden');
     });
+
+    let CategoryForm = document.getElementById('add-category-form');
+    let addCategory = document.getElementById('addCategory');
+
+    addCategory.addEventListener('click', () => {
+        CategoryForm.classList.remove('hidden');
+        container.classList.add('hidden');
+    });
+    function hideAddCategoryForm() {
+        CategoryForm.classList.add('hidden');
+        container.classList.remove('hidden');
+    }
 
 </script>
 

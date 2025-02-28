@@ -28,7 +28,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'family_id' => 'required|integer',
+            'color' => 'nullable|string',
+        ]);
+
+        Category::create($category);
+
+        return redirect('/')->with('success', 'Category created successfully.');
     }
 
     /**
