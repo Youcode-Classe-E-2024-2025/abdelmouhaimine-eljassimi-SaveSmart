@@ -41,7 +41,7 @@
                 <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
                 <div>
                     <h3 class="font-medium">{{ session('family')->name }}</h3>
-                    <p class="text-sm text-gray-500">Free Plan • 2 Member</p>
+                    <p class="text-sm text-gray-500">Free Plan • {{$numberProfiles}} Member</p>
                 </div>
             </div>
         </div>
@@ -186,7 +186,7 @@
         </div>
 
         <!-- NEW SECTION: Savings Charts -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
             <!-- Chart: Savings Goal vs Current Savings -->
             <div class="bg-white p-6 rounded-lg border border-gray-200">
                 <div class="flex items-center justify-between mb-4">
@@ -201,20 +201,6 @@
                 </div>
             </div>
 
-            <!-- Chart: Monthly Contributions -->
-            <div class="bg-white p-6 rounded-lg border border-gray-200">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-gray-700 font-medium">Monthly Contributions</h3>
-                    <div class="flex gap-2">
-                        <button class="text-xs bg-primary text-white px-2 py-1 rounded-md">Last 6 Months</button>
-                        <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">Last Year</button>
-                    </div>
-                </div>
-                <div class="h-64">
-                    <canvas id="monthlyContributionsChart"></canvas>
-                </div>
-            </div>
-        </div>
 
         <!-- NEW SECTION: Transaction History -->
         <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
@@ -226,7 +212,6 @@
                     <button class="text-xs bg-gray-100 px-2 py-1 rounded-md">Expense</button>
                 </div>
             </div>
-
             <!-- Transaction List -->
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse">
@@ -248,7 +233,7 @@
                             <span class="px-2 py-1 bg-[{{$transaction->category->color}}] text-white rounded-full text-xs">{{$transaction->category->name}}</span>
                         </td>
                         <td class="py-3 px-4 text-gray-700">{{$transaction->category->type}}</td>
-                        <td class="py-3 px-4 text-gray-700">{{$transaction->user->name}}</td>
+                        <td class="py-3 px-4 text-gray-700">{{$transaction->family->name}}</td>
                         @if($transaction->category->type == 'income')
                         <td class="py-3 px-4 text-right text-green-600 font-medium">{{$transaction->amount}} DH</td>
                         @else
@@ -473,6 +458,58 @@
         container.classList.remove('hidden');
     }
 
+
+    var targetAmount = <?php echo json_encode($totalBalance[0]->target_amount); ?>;
+    var currentAmount = <?php echo json_encode($totalBalance[0]->current_amount); ?>;
+
+    var ctx = document.getElementById('savingsProgressChart').getContext('2d');
+    var savingsProgressChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Target', 'Current'],
+            datasets: [{
+                label: 'Savings Progress',
+                data: [targetAmount, currentAmount],
+                borderColor: '#4CAF50',
+                backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointBackgroundColor: '#4CAF50'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Goal vs Current'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return '$' + tooltipItem.raw.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
 </script>
 
 </body>
