@@ -6,9 +6,16 @@ use App\Models\SavingGoal;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Family;
+use App\Models\User;
 
 class SavingGoalController extends Controller
 {
+
+    public function index(){
+        $goals = SavingGoal::with(['family'])->where('family_id', session('family')->id)->get();
+        return view('Goals', compact('goals'));
+    }
     public function SavingGoal(Request $request)
     {
 
@@ -33,6 +40,31 @@ class SavingGoalController extends Controller
         ]);
 
         return redirect('/')->with('success', 'Saving goal added successfully!');
+    }
+    public function SavingPersonalGoal(Request $request)
+    {
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'target_amount' => 'required|numeric|min:1',
+            'current_amount' => 'nullable|numeric|min:0',
+            'target_date' => 'required|date',
+            'is_completed' => 'nullable|boolean',
+            'family_id' => 'required|exists:families,id',
+        ]);
+
+        SavingGoal::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'target_amount' => $request->target_amount,
+            'current_amount' => $request->current_amount ?? 0,
+            'target_date' => $request->target_date,
+            'is_completed' => $request->is_completed ?? false,
+            'family_id' => session('family')->id
+        ]);
+
+        return redirect('/goal')->with('success', 'Saving goal added successfully!');
     }
 
 

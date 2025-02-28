@@ -32,11 +32,10 @@ Route::middleware(FamilyAuth::class)->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::post('/addMoney', [SavingGoalController::class, 'addMoney']);
     Route::post('/SavingGoal', [SavingGoalController::class, 'SavingGoal']);
+    Route::post('/SavingPersonalGoal', [SavingGoalController::class, 'SavingPersonalGoal']);
+    Route::get('/goal', [SavingGoalController::class, 'index']);
 });
 
-Route::get('/goal', function () {
-    return view('Goals');
-});
 
 
 

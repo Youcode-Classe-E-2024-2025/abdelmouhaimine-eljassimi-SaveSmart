@@ -123,7 +123,7 @@
                     <option value="completed">Completed</option>
                     <option value="at-risk">At Risk</option>
                 </select>
-                <button id="addObjectiveBtn" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
+                <button id="SavingGoal" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
@@ -198,31 +198,36 @@
         <!-- Objectives Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <!-- Objective Card 1 -->
+            @foreach($goals as $goal)
             <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                 <div class="h-2 bg-primary"></div>
                 <div class="p-6">
                     <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-medium text-lg">Emergency Fund</h3>
-                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span>
+                        <h3 class="font-medium text-lg">{{$goal->name}}</h3>
                     </div>
-                    <p class="text-gray-600 mb-4 text-sm">Build an emergency fund to cover 6 months of expenses</p>
+                    <p class="text-gray-600 mb-4 text-sm">{{$goal->description}}</p>
                     <div class="mb-4">
                         <div class="flex justify-between text-sm mb-1">
+                            @php
+                                $currentAmount = $goal->current_amount ?? 0;
+                                $targetAmount = $goal->target_amount ?? 1;
+                                $percentage = min(($currentAmount / max($targetAmount, 1)) * 100, 100);
+                            @endphp
                             <span>Progress</span>
-                            <span>65%</span>
+                            <span>{{$percentage}}%</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-primary h-2 rounded-full" style="width: 65%"></div>
+                            <div class="bg-primary h-2 rounded-full" style="width: {{$percentage}}%"></div>
                         </div>
                     </div>
                     <div class="flex justify-between text-sm text-gray-600">
                         <div>
-                            <p class="font-medium">Current: 6,500 DH</p>
-                            <p>Target: 10,000 DH</p>
+                            <p class="font-medium">Current: {{$goal->current_amount}} DH</p>
+                            <p>Target: {{$goal->target_amount}} DH</p>
                         </div>
                         <div class="text-right">
                             <p>Target Date:</p>
-                            <p>30 Jun 2025</p>
+                            <p>{{$goal->target_date}}</p>
                         </div>
                     </div>
                     <div class="flex justify-end gap-2 mt-4">
@@ -239,180 +244,92 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Objective Card 2 -->
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                <div class="h-2 bg-blue-500"></div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-medium text-lg">Family Vacation</h3>
-                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span>
-                    </div>
-                    <p class="text-gray-600 mb-4 text-sm">Save for our annual family trip to the beach</p>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Progress</span>
-                            <span>40%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-blue-500 h-2 rounded-full" style="width: 40%"></div>
-                        </div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-600">
-                        <div>
-                            <p class="font-medium">Current: 4,000 DH</p>
-                            <p>Target: 10,000 DH</p>
-                        </div>
-                        <div class="text-right">
-                            <p>Target Date:</p>
-                            <p>15 Jul 2025</p>
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-4">
-                        <button class="p-2 text-gray-500 hover:text-primary rounded-full">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                            </svg>
-                        </button>
-                        <button class="p-2 text-gray-500 hover:text-danger rounded-full">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Objective Card 3 -->
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                <div class="h-2 bg-purple-500"></div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-medium text-lg">New Car</h3>
-                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span>
-                    </div>
-                    <p class="text-gray-600 mb-4 text-sm">Save for a down payment on a new family car</p>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Progress</span>
-                            <span>25%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-purple-500 h-2 rounded-full" style="width: 25%"></div>
-                        </div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-600">
-                        <div>
-                            <p class="font-medium">Current: 12,500 DH</p>
-                            <p>Target: 50,000 DH</p>
-                        </div>
-                        <div class="text-right">
-                            <p>Target Date:</p>
-                            <p>15 Dec 2025</p>
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-4">
-                        <button class="p-2 text-gray-500 hover:text-primary rounded-full">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                            </svg>
-                        </button>
-                        <button class="p-2 text-gray-500 hover:text-danger rounded-full">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Objective Card 4 -->
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                <div class="h-2 bg-yellow-500"></div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-medium text-lg">Kid's Education</h3>
-                        <span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">At Risk</span>
-                    </div>
-                    <p class="text-gray-600 mb-4 text-sm">College fund for our children's future education</p>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Progress</span>
-                            <span>10%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 10%"></div>
-                        </div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-600">
-                        <div>
-                            <p class="font-medium">Current: 5,000 DH</p>
-                            <p>Target: 50,000 DH</p>
-                        </div>
-                        <div class="text-right">
-                            <p>Target Date:</p>
-                            <p>01 Sep 2025</p>
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-4">
-                        <button class="p-2 text-gray-500 hover:text-primary rounded-full">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                            </svg>
-                        </button>
-                        <button class="p-2 text-gray-500 hover:text-danger rounded-full">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Objective Card 5 -->
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                <div class="h-2 bg-orange-500"></div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-medium text-lg">Home Renovation</h3>
-                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span>
-                    </div>
-                    <p class="text-gray-600 mb-4 text-sm">Renovate kitchen and bathroom</p>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Progress</span>
-                            <span>35%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-orange-500 h-2 rounded-full" style="width: 35%"></div>
-                        </div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-600">
-                        <div>
-                            <p class="font-medium">Current: 10,500 DH</p>
-                            <p>Target: 30,000 DH</p>
-                        </div>
-                        <div class="text-right">
-                            <p>Target Date:</p>
-                            <p>30 Nov 2025</p>
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-4">
-                        <button class="p-2 text-gray-500 hover:text-primary rounded-full">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                            </svg>
-                        </button>
-                        <button class="p-2 text-gray-500 hover:text-danger rounded-full">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            @endforeach;
         </div>
     </main>
 </div>
+
+<div id="SavingGoal-form" class="min-h-screen container mx-auto px-4 py-16 hidden">
+    <!-- Header -->
+    <div class="flex justify-center mb-12">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
+                PFM
+            </div>
+            <span class="font-bold text-xl">Family Savings</span>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
+        <h2 class="text-2xl font-semibold mb-6">Add Saving Goal</h2>
+
+        <form action="/SavingPersonalGoal" method="POST" id="add-money-form">
+            @csrf
+            <input type="hidden" name="family_id" value="{{ session('family')->id }}">
+
+            <!-- Goal Name -->
+            <div class="mb-4">
+                <label for="goalName" class="block text-gray-700 mb-2">Goal Name</label>
+                <input type="text" name="name" id="goalName" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter goal name" required/>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 mb-2">Description</label>
+                <textarea name="description" id="description" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Describe your goal" rows="3"></textarea>
+            </div>
+
+            <!-- Target Amount -->
+            <div class="mb-4">
+                <label for="targetAmount" class="block text-gray-700 mb-2">Target Amount (DH)</label>
+                <input type="number" name="target_amount" id="targetAmount" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter target amount" required min="1"/>
+            </div>
+
+            <!-- Current Amount -->
+            <div class="mb-4">
+                <label for="currentAmount" class="block text-gray-700 mb-2">Current Amount (DH)</label>
+                <input type="number" name="current_amount" id="currentAmount" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter current amount" min="0"/>
+            </div>
+
+            <!-- Target Date -->
+            <div class="mb-4">
+                <label for="targetDate" class="block text-gray-700 mb-2">Target Date</label>
+                <input type="date" name="target_date" id="targetDate" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required/>
+            </div>
+
+            <!-- Is Completed -->
+            <div class="mb-4 flex items-center">
+                <input type="checkbox" name="is_completed" id="isCompleted" class="mr-2">
+                <label for="isCompleted" class="text-gray-700">Mark as Completed</label>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-green-600 transition-colors">
+                    Add to Savings
+                </button>
+
+                <button type="button" onclick="hideAddMoneyForm()" class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+    let SavingGoal = document.getElementById('SavingGoal');
+    let SavingGoalForm = document.getElementById('SavingGoal-form');
+
+    SavingGoal.addEventListener('click', () => {
+        console.log('click');
+        SavingGoalForm.classList.remove('hidden');
+        container.classList.add('hidden');
+    });
+
+    function hideAddMoneyForm() {
+        container.classList.remove('hidden');
+        SavingGoalForm.classList.add('hidden');
+    }
+</script>
 </body>
 </html>
