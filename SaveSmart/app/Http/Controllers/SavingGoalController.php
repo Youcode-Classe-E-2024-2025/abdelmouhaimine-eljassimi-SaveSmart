@@ -66,8 +66,6 @@ class SavingGoalController extends Controller
 
         return redirect('/goal')->with('success', 'Saving goal added successfully!');
     }
-
-
     public function addMoney(Request $request)
     {
         $Saving_Goal = SavingGoal::where('family_id', session('user')->id)->first();
@@ -102,6 +100,19 @@ class SavingGoalController extends Controller
 
         return redirect('/')->with('error', 'Saving Goal or Category not found');
     }
+    public function delete($goal_id)
+    {
+        $goal = SavingGoal::find($goal_id);
+
+        if ($goal) {
+            $goal->delete();
+            return redirect('/goal')->with('success', 'Objectif supprimé avec succès');
+        }
+
+        return redirect('/goal')->with('error', 'Objectif non trouvé');
+    }
+
+
 
 
 }
