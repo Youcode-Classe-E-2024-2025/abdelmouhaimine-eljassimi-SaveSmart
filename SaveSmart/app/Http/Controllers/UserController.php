@@ -19,7 +19,7 @@ class UserController extends Controller
 
     public function dashboard(){
         $transaction = Transaction::where('family_id', session('family')->id)->latest()->first();
-        $transactions = Transaction::all();
+        $transactions = Transaction::where('family_id', session('family')->id)->get();
         $totalBalance = SavingGoal::where('family_id', session('user')->id)->where('name', 'Principale')->get();
         $categories = Category::where('family_id', session('user')->id)->get();
         return view('welcome', compact( 'totalBalance', 'categories', 'transaction', 'transactions'));
@@ -71,7 +71,7 @@ class UserController extends Controller
     }
 
     public function logout(){
-        auth()->logout();
+        session()->forget('user');
         return redirect('/login');
     }
 }

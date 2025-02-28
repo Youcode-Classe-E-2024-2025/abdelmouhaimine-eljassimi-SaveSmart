@@ -81,9 +81,9 @@
         </div>
 
         <div class="text-center">
-            <button class="px-8 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                Manage Profiles
-            </button>
+            <a href="/logout" class="px-8 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                Logout
+            </a>
         </div>
     </div>
 </div>

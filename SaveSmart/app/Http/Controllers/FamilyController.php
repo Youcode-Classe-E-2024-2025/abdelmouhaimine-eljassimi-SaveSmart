@@ -48,6 +48,10 @@ class FamilyController extends Controller
         }
     }
 
+    public function logout(){
+        session()->forget('family');
+        return redirect('/family');
+    }
 }
 
 

@@ -89,12 +89,12 @@
 
         <!-- Logout -->
         <div class="absolute bottom-0 w-full p-4 border-t border-gray-200">
-            <button class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg w-full">
+            <a href="/logoutprofile" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg w-full">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                 </svg>
                 Logout
-            </button>
+            </a>
         </div>
     </aside>
 
@@ -247,12 +247,12 @@
                         <td class="py-3 px-4">
                             <span class="px-2 py-1 bg-[{{$transaction->category->color}}] text-white rounded-full text-xs">{{$transaction->category->name}}</span>
                         </td>
-                        <td class="py-3 px-4 text-gray-700">Monthly Salary</td>
+                        <td class="py-3 px-4 text-gray-700">{{$transaction->category->type}}</td>
                         <td class="py-3 px-4 text-gray-700">{{$transaction->user->name}}</td>
                         @if($transaction->category->type == 'income')
-                        <td class="py-3 px-4 text-right text-green-600 font-medium">{{$transaction->amount}}</td>
+                        <td class="py-3 px-4 text-right text-green-600 font-medium">{{$transaction->amount}} DH</td>
                         @else
-                            <td class="py-3 px-4 text-right text-red-600 font-medium">-{{$transaction->amount}}</td>
+                            <td class="py-3 px-4 text-right text-red-600 font-medium">-{{$transaction->amount}} DH</td>
                         @endif
                     </tr>
                     @endforeach
