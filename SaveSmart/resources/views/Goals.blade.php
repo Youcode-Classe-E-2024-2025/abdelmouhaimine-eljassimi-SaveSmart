@@ -194,57 +194,89 @@
                 </div>
             </div>
         </div>
-
         <!-- Objectives Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <!-- Objective Card 1 -->
             @foreach($goals as $goal)
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                <div class="h-2 bg-primary"></div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-medium text-lg">{{$goal->name}}</h3>
-                    </div>
-                    <p class="text-gray-600 mb-4 text-sm">{{$goal->description}}</p>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm mb-1">
-                            @php
-                                $currentAmount = $goal->current_amount ?? 0;
-                                $targetAmount = $goal->target_amount ?? 1;
-                                $percentage = min(($currentAmount / max($targetAmount, 1)) * 100, 100);
-                            @endphp
-                            <span>Progress</span>
-                            <span>{{$percentage}}%</span>
+                <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="h-2 bg-primary"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-medium text-lg">{{$goal->name}}</h3>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-primary h-2 rounded-full" style="width: {{$percentage}}%"></div>
+                        <p class="text-gray-600 mb-4 text-sm">{{$goal->description}}</p>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                @php
+                                    $currentAmount = $goal->current_amount ?? 0;
+                                    $targetAmount = $goal->target_amount ?? 1;
+                                    $percentage = min(($currentAmount / max($targetAmount, 1)) * 100, 100);
+                                @endphp
+                                <span>Progress</span>
+                                <span>{{$percentage}}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full" style="width: {{$percentage}}%"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-600">
-                        <div>
-                            <p class="font-medium">Current: {{$goal->current_amount}} DH</p>
-                            <p>Target: {{$goal->target_amount}} DH</p>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <div>
+                                <p class="font-medium">Current: {{$goal->current_amount}} DH</p>
+                                <p>Target: {{$goal->target_amount}} DH</p>
+                            </div>
+                            <div class="text-right">
+                                <p>Target Date:</p>
+                                <p>{{$goal->target_date}}</p>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <p>Target Date:</p>
-                            <p>{{$goal->target_date}}</p>
+                        <div class="flex justify-end gap-2 mt-4">
+                            <a href="#" id="editGoal" class="editGoal p-2 text-gray-500 hover:text-primary rounded-full" data-id="{{ $goal->id }}" data-name="{{ $goal->name }}" data-description="{{ $goal->description }}" data-target="{{ $goal->target_amount }}" data-current="{{ $goal->current_amount }}" data-date="{{ $goal->target_date }}" data-completed="{{ $goal->is_completed }}">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                </svg>
+                            </a>
+                            <a href="{{ route('goal.delete', $goal->id) }}" class="p-2 text-gray-500 hover:text-danger rounded-full">                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </a>
                         </div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-4">
-                        <a href="#" id="editGoal" class="editGoal p-2 text-gray-500 hover:text-primary rounded-full" data-id="{{ $goal->id }}" data-name="{{ $goal->name }}" data-description="{{ $goal->description }}" data-target="{{ $goal->target_amount }}" data-current="{{ $goal->current_amount }}" data-date="{{ $goal->target_date }}" data-completed="{{ $goal->is_completed }}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                            </svg>
-                        </a>
-                        <a href="{{ route('goal.delete', $goal->id) }}" class="p-2 text-gray-500 hover:text-danger rounded-full">                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </a>
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
+        <div class="flex justify-between">
+            <h1 class="text-2xl font-semibold">Optimization </h1>
+            <button id="optimisation" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Add Budget
+            </button>
+        </div>
+
+        <!-- Budget Display Section -->
+        <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Your Budget</h2>
+            <div class="flex items-center justify-between">
+                <p class="text-gray-600">Current Budget: <span class="font-semibold">5000 DH</span></p>
+                <button id="applyOptimization" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    Apply Optimization
+                </button>
+            </div>
+        </div>
+
+        <!-- Optimization Results Section -->
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <h2 class="text-xl font-semibold mb-4">Optimization Results</h2>
+            <div id="optimizationResults" class="text-gray-600">
+                <!-- Results will be displayed here -->
+                <p>No optimization results yet. Click "Apply Optimization" to see the results.</p>
+            </div>
+        </div>
+
     </main>
 </div>
 
@@ -369,11 +401,43 @@
         </form>
     </div>
 </div>
+<div id="optimisation-form" class="min-h-screen container mx-auto px-4 py-16 hidden">
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg border border-gray-200">
+        <h2 class="text-2xl font-semibold mb-6">Add Budget</h2>
+
+        <form action="/AddBudget" method="POST" id="add-money-form">
+            @csrf
+
+            <div class="mb-4">
+                <label for="Budget" class="block text-gray-700 mb-2">Enter Your Budget</label>
+                <input type="text" name="Budget" id="Budget" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter goal name" required/>
+            </div>
+            <div class="flex gap-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-green-600 transition-colors">
+                    Edit Saving Goal
+                </button>
+
+                <button type="button" onclick="hideAddMoneyForm()" class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
 
     let SavingGoal = document.getElementById('SavingGoal');
     let SavingGoalForm = document.getElementById('SavingGoal-form');
     let SavingGoalEdit = document.getElementById('SavingGoal-edit');
+
+    let optimisation = document.getElementById('optimisation');
+    let optimisationForm = document.getElementById('optimisation-form');
+
+    optimisation.addEventListener('click', () => {
+        console.log('click');
+        optimisationForm.classList.remove('hidden');
+        container.classList.add('hidden');
+    });
 
     SavingGoal.addEventListener('click', () => {
         console.log('click');
@@ -386,6 +450,7 @@
         container.classList.remove('hidden');
         SavingGoalEdit.classList.add('hidden');
         SavingGoalForm.classList.add('hidden');
+        optimisationForm.classList.add('hidden');
     }
 
     document.querySelectorAll('.editGoal').forEach(btn => {
@@ -415,7 +480,21 @@
         });
     });
 
-
+    // Add event listener for the "Apply Optimization" button
+    document.getElementById('applyOptimization').addEventListener('click', function () {
+        // Placeholder for optimization logic
+        const optimizationResults = document.getElementById('optimizationResults');
+        optimizationResults.innerHTML = `
+            <p class="text-green-600">Optimization applied successfully!</p>
+            <p class="mt-2">Here are the suggested allocations:</p>
+            <ul class="list-disc list-inside mt-2">
+                <li>Objective 1: 2000 DH</li>
+                <li>Objective 2: 1500 DH</li>
+                <li>Objective 3: 1000 DH</li>
+                <li>Savings: 500 DH</li>
+            </ul>
+        `;
+    });
 
 </script>
 </body>

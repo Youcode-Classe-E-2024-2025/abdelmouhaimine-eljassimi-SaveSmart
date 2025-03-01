@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SavingGoal;
+use App\Models\TotalBalance;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -13,6 +14,7 @@ class SavingGoalController extends Controller
 {
 
     public function index(){
+        $budgets = TotalBalance::where('family_id', session('family')->id);
         $goals = SavingGoal::with(['family'])->where('family_id', session('family')->id)->get();
         return view('Goals', compact('goals'));
     }

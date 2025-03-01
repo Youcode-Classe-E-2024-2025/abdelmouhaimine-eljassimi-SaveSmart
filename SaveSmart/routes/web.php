@@ -36,6 +36,7 @@ Route::middleware(FamilyAuth::class)->group(function () {
     Route::post('//EditSavingGoal', [SavingGoalController::class, 'EditSavingGoal']);
     Route::get('/goal', [SavingGoalController::class, 'index']);
     Route::get('/deleteGoal/{goal_id}', [SavingGoalController::class, 'delete'])->name('goal.delete');
+    Route::post('/AddBudget', [TotalBalanceController::class, 'AddBudget']);
 });
 
 
