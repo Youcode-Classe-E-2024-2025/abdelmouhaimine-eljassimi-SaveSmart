@@ -258,13 +258,17 @@
         <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
             <h2 class="text-xl font-semibold mb-4">Your Budget</h2>
             <div class="flex items-center justify-between">
-                <p class="text-gray-600">Current Budget: <span class="font-semibold">5000 DH</span></p>
-                <button id="applyOptimization" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                    Apply Optimization
-                </button>
+                <p class="text-gray-600">Current Budget: <span class="font-semibold">{{$budget->balance}} DH</span></p>
+                <form action="/optimization" method="POST">
+                    @csrf
+                <input type="hidden" name="budget" value="{{ $budget->balance }}">
+                    <button type="submit" id="applyOptimization" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Apply Optimization
+                    </button>
+                </form>
             </div>
         </div>
 
@@ -272,9 +276,57 @@
         <div class="bg-white p-6 rounded-lg border border-gray-200">
             <h2 class="text-xl font-semibold mb-4">Optimization Results</h2>
             <div id="optimizationResults" class="text-gray-600">
-                <!-- Results will be displayed here -->
-                <p>No optimization results yet. Click "Apply Optimization" to see the results.</p>
+                <!-- Default message before optimization is applied -->
+                @if(empty(session('optimizationResult')))
+                <p class="text-gray-500">No optimization results yet. Click "Apply Optimization" to see the suggested budget allocation.</p>
+                @else
+                <!-- Example of how results will be displayed after optimization -->
+                <div id="optimizedAllocation">
+                    <p class="text-green-600 font-semibold mb-4">Optimization applied successfully! Here's the suggested budget allocation:</p>
+
+                    <!-- Budget Allocation Breakdown -->
+                    <div class="space-y-4">
+                        <!-- Needs -->
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-medium text-green-700">Needs</h3>
+                                <span class="text-green-700">50% of Budget</span>
+                            </div>
+                            <p class="text-sm text-green-600 mt-2">Essential expenses like rent, utilities, and groceries : <strong>{{session('optimizationResult')['besoins'] ?? '0'}} DH</strong></p>
+                            <div class="w-full bg-green-100 rounded-full h-2 mt-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 60%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Wants -->
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-medium text-blue-700">Wants</h3>
+                                <span class="text-blue-700">30% of Budget</span>
+                            </div>
+                            <p class="text-sm text-blue-600 mt-2">Non-essential expenses like entertainment, dining out, and hobbies : <strong>{{session('optimizationResult')['envies'] ?? '0'}} DH</strong></p>
+                            <div class="w-full bg-blue-100 rounded-full h-2 mt-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 30%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Savings -->
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-medium text-purple-700">Savings</h3>
+                                <span class="text-purple-700">20% of Budget</span>
+                            </div>
+                            <p class="text-sm text-purple-600 mt-2">Savings for future goals, emergencies, or investments : : <strong>{{session('optimizationResult')['epargne'] ?? '0'}} DH</strong></p>
+                            <div class="w-full bg-purple-100 rounded-full h-2 mt-2">
+                                <div class="bg-purple-500 h-2 rounded-full" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Budget -->
+
             </div>
+                @endif
         </div>
 
     </main>
@@ -480,21 +532,8 @@
         });
     });
 
-    // Add event listener for the "Apply Optimization" button
-    document.getElementById('applyOptimization').addEventListener('click', function () {
-        // Placeholder for optimization logic
-        const optimizationResults = document.getElementById('optimizationResults');
-        optimizationResults.innerHTML = `
-            <p class="text-green-600">Optimization applied successfully!</p>
-            <p class="mt-2">Here are the suggested allocations:</p>
-            <ul class="list-disc list-inside mt-2">
-                <li>Objective 1: 2000 DH</li>
-                <li>Objective 2: 1500 DH</li>
-                <li>Objective 3: 1000 DH</li>
-                <li>Savings: 500 DH</li>
-            </ul>
-        `;
-    });
+
+
 
 </script>
 </body>

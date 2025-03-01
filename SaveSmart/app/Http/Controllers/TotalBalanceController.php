@@ -16,4 +16,30 @@ class TotalBalanceController extends Controller
         TotalBalance::create(["family_id"=>session('family')->id,"balance"=>$request->Budget]);
         return redirect('/goal');
     }
+
+    public function Optimization(Request $request)
+    {
+        $request->validate([
+           "budget" => "required|numeric"
+        ]);
+
+        $budget = $request->budget;
+
+        $needsPercentage = 0.50;
+        $wantsPercentage = 0.30;
+        $savingsPercentage = 0.20;
+
+        $needs = $budget * $needsPercentage;
+        $wants = $budget * $wantsPercentage;
+        $savings = $budget * $savingsPercentage;
+
+        session([
+            'optimizationResult' => [
+                'besoins' => $needs,
+                'envies' => $wants,
+                'epargne' => $savings,
+            ],
+        ]);
+        return redirect('/goal');
+    }
 }

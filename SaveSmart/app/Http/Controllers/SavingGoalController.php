@@ -14,9 +14,9 @@ class SavingGoalController extends Controller
 {
 
     public function index(){
-        $budgets = TotalBalance::where('family_id', session('family')->id);
+        $budget = TotalBalance::where('family_id', session('family')->id)->latest()->first();
         $goals = SavingGoal::with(['family'])->where('family_id', session('family')->id)->get();
-        return view('Goals', compact('goals'));
+        return view('Goals', compact('goals', 'budget'));
     }
     public function SavingGoal(Request $request)
     {
