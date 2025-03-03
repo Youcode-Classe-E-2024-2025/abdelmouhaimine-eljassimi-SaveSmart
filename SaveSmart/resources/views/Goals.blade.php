@@ -51,7 +51,7 @@
                 <h4 class="text-xs font-semibold text-gray-500 mb-2">GENERAL</h4>
                 <ul class="space-y-1">
                     <li>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <a href="/" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                             </svg>
@@ -150,50 +150,6 @@
                 </div>
             </div>
 
-            <!-- In Progress -->
-            <div class="bg-white p-6 rounded-lg border border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500">In Progress</p>
-                        <p class="text-2xl font-semibold mt-1">4</p>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Completed -->
-            <div class="bg-white p-6 rounded-lg border border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500">Completed</p>
-                        <p class="text-2xl font-semibold mt-1">1</p>
-                    </div>
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <!-- At Risk -->
-            <div class="bg-white p-6 rounded-lg border border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500">At Risk</p>
-                        <p class="text-2xl font-semibold mt-1">1</p>
-                    </div>
-                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
         </div>
         <!-- Objectives Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -259,10 +215,10 @@
         <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
             <h2 class="text-xl font-semibold mb-4">Your Budget</h2>
             <div class="flex items-center justify-between">
-                <p class="text-gray-600">Current Budget: <span class="font-semibold">{{$budget->balance}} DH</span></p>
+                <p class="text-gray-600">Current Budget: <span class="font-semibold">{{$budget->balance ?? '0'}} DH</span></p>
                 <form action="/optimization" method="POST">
                     @csrf
-                <input type="hidden" name="budget" value="{{ $budget->balance }}">
+                <input type="hidden" name="budget" value="{{ $budget->balance ?? '0' }}">
                     <button type="submit" id="applyOptimcomposer require maatwebsite/excel:^3.1 --with-dependencies
 ization" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

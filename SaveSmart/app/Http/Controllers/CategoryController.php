@@ -33,8 +33,8 @@ class CategoryController extends Controller
             'type' => 'required|string|max:255',
             'family_id' => 'required|integer',
             'color' => 'nullable|string',
+            'user_id' => 'required|integer'
         ]);
-
         Category::create($category);
 
         return redirect('/')->with('success', 'Category created successfully.');

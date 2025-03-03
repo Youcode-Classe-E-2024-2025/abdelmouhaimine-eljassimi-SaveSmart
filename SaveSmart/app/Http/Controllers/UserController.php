@@ -21,8 +21,8 @@ class UserController extends Controller
     public function dashboard(){
         $transaction = Transaction::where('family_id', session('family')->id)->latest()->first();
         $transactions = Transaction::with(['family', 'user', 'category'])->where('user_id', session('user')->id)->paginate(5);
-        $totalBalance = SavingGoal::where('family_id', session('user')->id)->latest()->get();
-        $categories = Category::where('family_id', session('user')->id)->get();
+        $totalBalance = SavingGoal::where('user_id', session('user')->id)->latest()->get();
+        $categories = Category::where('user_id', session('user')->id)->get();
         if($transactions === null){
             return view('welcome', compact( 'totalBalance', 'categories', 'transaction'));
         }

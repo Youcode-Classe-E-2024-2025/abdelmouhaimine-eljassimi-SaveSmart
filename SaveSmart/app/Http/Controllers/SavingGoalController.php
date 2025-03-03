@@ -20,7 +20,6 @@ class SavingGoalController extends Controller
     }
     public function SavingGoal(Request $request)
     {
-
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -28,9 +27,9 @@ class SavingGoalController extends Controller
             'current_amount' => 'nullable|numeric|min:0',
             'target_date' => 'required|date',
             'is_completed' => 'nullable|boolean',
+            'user_id' => 'required|exists:users,id',
             'family_id' => 'required|exists:families,id',
         ]);
-
         SavingGoal::create([
             'name' => $request->name,
             'description' => $request->description,
@@ -38,11 +37,14 @@ class SavingGoalController extends Controller
             'current_amount' => $request->current_amount ?? 0,
             'target_date' => $request->target_date,
             'is_completed' => $request->is_completed ?? false,
-            'family_id' => session('user')->id
+            'family_id' => $request->family_id,
+            'user_id' => $request->user_id,
         ]);
 
         return redirect('/')->with('success', 'Saving goal added successfully!');
     }
+
+
     public function SavingPersonalGoal(Request $request)
     {
 

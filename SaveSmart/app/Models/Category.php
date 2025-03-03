@@ -14,7 +14,8 @@ class Category extends Model
         'type',
         'color',
         'family_id',
-        'is_default'
+        'is_default',
+        'user_id'
     ];
 
     public function transactions()
@@ -26,4 +27,10 @@ class Category extends Model
     {
         return $this->belongsTo(Family::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

@@ -16,7 +16,8 @@ class SavingGoal extends Model
         'current_amount',
         'target_date',
         'is_completed',
-        'family_id'
+        'family_id',
+        'user_id'
     ];
 
     protected $casts = [
