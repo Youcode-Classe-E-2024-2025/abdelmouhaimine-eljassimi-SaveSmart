@@ -129,6 +129,7 @@
                     </svg>
                     Add Objective
                 </button>
+                <a href="/exportcsv" class="px-4 py-2 bg-primary text-white rounded-lg"><i class='bx bxs-file-pdf text-xl'></i> Export</a>
             </div>
         </div>
 
@@ -262,7 +263,8 @@
                 <form action="/optimization" method="POST">
                     @csrf
                 <input type="hidden" name="budget" value="{{ $budget->balance }}">
-                    <button type="submit" id="applyOptimization" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
+                    <button type="submit" id="applyOptimcomposer require maatwebsite/excel:^3.1 --with-dependencies
+ization" class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
@@ -294,7 +296,7 @@
                             </div>
                             <p class="text-sm text-green-600 mt-2">Essential expenses like rent, utilities, and groceries : <strong>{{session('optimizationResult')['besoins'] ?? '0'}} DH</strong></p>
                             <div class="w-full bg-green-100 rounded-full h-2 mt-2">
-                                <div class="bg-green-500 h-2 rounded-full" style="width: 60%"></div>
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 50%"></div>
                             </div>
                         </div>
 

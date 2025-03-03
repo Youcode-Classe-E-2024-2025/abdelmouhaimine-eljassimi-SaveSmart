@@ -142,7 +142,34 @@ class SavingGoalController extends Controller
         return redirect('/goal')->with('error', 'Objectif non trouvé');
     }
 
+    public function exportCSV()
+    {
 
+        $goals = SavingGoal::where('family_id', session('family')->id)->get();
+
+        $fileName = 'saving-goals-export-' . now()->format('Y-m-d') . '.csv';
+
+        return response()->streamDownload(function () use ($goals) {
+
+            $handle = fopen('php://output', 'w');
+
+
+            fputcsv($handle, ['ID', 'Goal Name', 'Target Amount', 'Current Amount', 'Created At', 'Updated At']);
+
+            foreach ($goals as $goal) {
+                fputcsv($handle, [
+                    $goal->id,
+                    $goal->name,
+                    $goal->target_amount,
+                    $goal->current_amount,
+                    $goal->created_at->format('Y-m-d H:i:s'),
+                    $goal->updated_at->format('Y-m-d H:i:s')
+                ]);
+            }
+
+            fclose($handle);
+        }, $fileName);
+    }
 
 
 }

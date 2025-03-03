@@ -38,6 +38,8 @@ Route::middleware(FamilyAuth::class)->group(function () {
     Route::get('/deleteGoal/{goal_id}', [SavingGoalController::class, 'delete'])->name('goal.delete');
     Route::post('/AddBudget', [TotalBalanceController::class, 'AddBudget']);
     Route::post('/optimization', [TotalBalanceController::class, 'Optimization']);
+    Route::get('/exportcsv', [SavingGoalController::class, 'exportCSV']);
+
 });
 
 
