@@ -6,25 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-
     public function up()
     {
         Schema::table('saving_goals', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->nullable();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->decimal('amount', 10, 2); // Adjust the precision and scale as needed
         });
     }
-
 
     public function down()
     {
         Schema::table('saving_goals', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
+            $table->dropColumn('amount');
         });
     }
+
 };

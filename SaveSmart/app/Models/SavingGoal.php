@@ -1,14 +1,14 @@
 <?php
+// app/Models/SavingGoal.php
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SavingGoal extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'name',
         'description',
@@ -16,28 +16,23 @@ class SavingGoal extends Model
         'current_amount',
         'target_date',
         'is_completed',
+        'user_id',
         'family_id',
-        'user_id'
+        'category_id',
     ];
 
-    protected $casts = [
-        'target_date' => 'date',
-        'is_completed' => 'boolean',
-        'target_amount' => 'decimal:2',
-        'current_amount' => 'decimal:2'
-    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function family()
     {
         return $this->belongsTo(Family::class);
     }
 
-    public function getProgressPercentageAttribute()
+    public function category()
     {
-        if ($this->target_amount <= 0) {
-            return 0;
-        }
-
-        return min(100, ($this->current_amount / $this->target_amount) * 100);
+        return $this->belongsTo(Category::class);
     }
 }

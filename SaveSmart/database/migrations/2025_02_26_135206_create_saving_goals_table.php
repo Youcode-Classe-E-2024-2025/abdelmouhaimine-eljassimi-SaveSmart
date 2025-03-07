@@ -16,10 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('target_amount', 10, 2);
-            $table->decimal('current_amount', 10, 2)->default(0);
-            $table->date('target_date')->nullable();
+            $table->decimal('current_amount', 10, 2)->default(0.00);
+            $table->date('target_date');
             $table->boolean('is_completed')->default(false);
-            $table->foreignId('family_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('family_id')->constrained();
+            $table->foreignId('category_id')->constrained();
             $table->timestamps();
         });
     }
