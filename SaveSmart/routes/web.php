@@ -17,7 +17,7 @@ Route::post('login', [UserController::class, 'login']);
 
 
 Route::get('/logoutprofile', [FamilyController::class, 'logout']);
-Route::get('//logout', [UserController::class, 'logout']);
+Route::get('/logout', [UserController::class, 'logout']);
 
 
 Route::middleware(UserAuth::class)->group(function () {

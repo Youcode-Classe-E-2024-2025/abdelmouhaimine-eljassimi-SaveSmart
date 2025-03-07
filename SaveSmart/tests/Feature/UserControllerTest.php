@@ -1,68 +1,73 @@
 <?php
+
 namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Hash;
 
 class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
 
-    /** @test */
-    public function it_can_register_a_new_user()
+    public function test_registration_page_is_accessible()
+    {
+        $response = $this->get('/register');
+        $response->assertStatus(200);
+    }
+
+    public function test_user_can_register()
     {
         $response = $this->post('/register', [
-            'name' => 'John Doe',
-            'email' => 'john.doe@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+            'name' => 'Test User',
+            'email' => 'testuser@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
         ]);
 
-        $this->assertDatabaseHas('users', [
-            'email' => 'john.doe@example.com',
-        ]);
         $response->assertRedirect('/login');
+        $this->assertDatabaseHas('users', ['email' => 'testuser@example.com']);
     }
 
-    /** @test */
-    public function it_can_login_with_valid_credentials()
+    public function test_login_page_is_accessible()
     {
-        $user = User::create([
-            'name' => 'John Doe',
-            'email' => 'john.doe@example.com',
-            'password' => Hash::make('password123'),
-        ]);
+        $response = $this->get('/login');
+        $response->assertStatus(200);
+    }
 
+    public function test_user_can_login()
+    {
+        $user = User::factory()->create([
+            'email' => 'testuser@example.com',
+            'password' => bcrypt('password'),
+        ]);
 
         $response = $this->post('/login', [
-            'email' => 'john.doe@example.com',
-            'password' => 'password123',
+            'email' => 'testuser@example.com',
+            'password' => 'password',
         ]);
-
-        $this->assertAuthenticatedAs($user);
 
         $response->assertRedirect('/family');
+        $this->assertAuthenticatedAs($user);
     }
 
-    /** @test */
-    public function it_cannot_login_with_invalid_credentials()
+    public function test_user_cannot_login_with_invalid_credentials()
     {
-
-        $user = User::create([
-            'name' => 'John Doe',
-            'email' => 'john.doe@example.com',
-            'password' => Hash::make('password123'),
+        $user = User::factory()->create([
+            'email' => 'testuser@example.com',
+            'password' => bcrypt('password'),
         ]);
 
         $response = $this->post('/login', [
-            'email' => 'john.doe@example.com',
+            'email' => 'testuser@example.com',
             'password' => 'wrongpassword',
         ]);
 
         $response->assertRedirect('/login?error=Email or password is incorrect');
+        $this->assertGuest();
     }
 
     /** @test */
@@ -84,4 +89,5 @@ class UserControllerTest extends TestCase
         $response = $this->get('/logout');
         $response->assertRedirect('/login');
     }
+
 }
