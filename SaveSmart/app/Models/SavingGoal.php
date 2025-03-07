@@ -18,7 +18,6 @@ class SavingGoal extends Model
         'is_completed',
         'user_id',
         'family_id',
-        'category_id',
     ];
 
     public function user()
@@ -31,8 +30,4 @@ class SavingGoal extends Model
         return $this->belongsTo(Family::class);
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
 }

@@ -29,7 +29,6 @@ class SavingGoalController extends Controller
             'is_completed' => 'nullable|boolean',
             'user_id' => 'required|exists:users,id',
             'family_id' => 'required|exists:families,id',
-            'category_id' => 'required|exists:categories,id'
         ]);
         SavingGoal::create([
             'name' => $request->name,
@@ -40,7 +39,6 @@ class SavingGoalController extends Controller
             'is_completed' => $request->is_completed ?? false,
             'family_id' => $request->family_id,
             'user_id' => $request->user_id,
-            'category_id' => $request->category_id,
         ]);
 
         return redirect('/')->with('success', 'Saving goal added successfully!');
